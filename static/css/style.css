@@ -1,0 +1,17 @@
+body { margin:0; font-family:Arial, sans-serif; background:#f0f2f5; }
+.navbar { background:#fff; padding:10px 20px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 2px 4px rgba(0,0,0,0.1); }
+.nav-title { font-size:18px; font-weight:bold; }
+.btn-logout, .btn-back { text-decoration:none; color:#333; padding:6px 12px; border:1px solid #ccc; border-radius:4px; }
+.container { max-width:900px; margin:30px auto; background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+h2, h3 { margin-top:0; }
+.auth-container { max-width:400px; margin:100px auto; background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); text-align:center; }
+.auth-form input { width:100%; padding:10px; margin:10px 0; border:1px solid #ccc; border-radius:4px; }
+.form-inline { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:20px; }
+.form-inline input, .form-inline select { flex:1; padding:10px; border:1px solid #ccc; border-radius:4px; }
+.btn-primary { background:#007bff; color:#fff; border:none; padding:10px 20px; border-radius:4px; cursor:pointer; }
+.btn-primary:hover { background:#0056b3; }
+.error { color:red; }
+.table { width:100%; border-collapse:collapse; margin-top:20px; }
+.table th, .table td { padding:12px; border-bottom:1px solid #ddd; text-align:left; }
+.table tr:nth-child(even) { background:#f9f9f9; }
+.table tr:hover { background:#f1f1f1; }
