@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transactions</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <span class="nav-title">Transactions</span>
+        <a href="/products" class="btn-back">Back</a>
+        <a href="/logout" class="btn-logout">Logout</a>
+    </nav>
+    <div class="container">
+        <h2>Record Transaction</h2>
+        <form id="transactionForm" class="form-inline">
+            <select id="type">
+                <option>IN</option>
+                <option>OUT</option>
+            </select>
+            <input id="quantity" type="number" placeholder="Quantity" required>
+            <button type="submit" class="btn-primary">Record</button>
+        </form>
+        <h3>History</h3>
+        <table class="table">
+            <thead>
+                <tr><th>Type</th><th>Quantity</th><th>Timestamp</th><th>Print</th></tr>
+            </thead>
+            <tbody id="transactionsTable"></tbody>
+        </table>
+    </div>
+    <script>
+        const productId = window.location.pathname.split('/').pop();
+    </script>
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

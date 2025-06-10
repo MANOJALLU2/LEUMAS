@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <span class="nav-title">Inventory App</span>
+        <button id="toggleView" class="btn-primary">Show Transactions</button>
+        <a href="/logout" class="btn-logout">Logout</a>
+    </nav>
+    <div class="container">
+        <div id="productsView">
+            <h2>Products</h2>
+            <form id="productForm" class="form-inline">
+                <input id="name" placeholder="Name" required>
+                <input id="sku" placeholder="SKU" required>
+                <input id="category" placeholder="Category" required>
+                <input id="initial_stock" type="number" placeholder="Initial Stock" required>
+                <button type="submit" class="btn-primary">Add</button>
+            </form>
+            <table class="table">
+                <thead>
+                    <tr><th>Name</th><th>SKU</th><th>Category</th><th>Stock</th><th>Actions</th></tr>
+                </thead>
+                <tbody id="productsTable"></tbody>
+            </table>
+        </div>
+        <div id="transactionsView" style="display:none;">
+            <h2>Transactions</h2>
+            <select id="productSelect" class="form-inline">
+                <option value="">Select Product</option>
+            </select>
+            <button id="printAll" class="btn-primary">Print All</button>
+            <table class="table">
+                <thead>
+                    <tr><th>Type</th><th>Quantity</th><th>Timestamp</th><th>Print</th></tr>
+                </thead>
+                <tbody id="dynamicTransactionsTable"></tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        const productsView = document.getElementById('productsView');
+        const transactionsView = document.getElementById('transactionsView');
+        const toggleViewBtn = document.getElementById('toggleView');
+        toggleViewBtn.onclick = () => {
+            if (productsView.style.display === 'none') {
+                productsView.style.display = '';
+                transactionsView.style.display = 'none';
+                toggleViewBtn.textContent = 'Show Transactions';
+            } else {
+                productsView.style.display = 'none';
+                transactionsView.style.display = '';
+                toggleViewBtn.textContent = 'Show Products';
+            }
+        };
+        function loadProducts() {
+            fetch('/api/products')
+                .then(r => r.json())
+                .then(data => {
+                    const select = document.getElementById('productSelect');
+                    select.innerHTML = '<option value="">Select Product</option>';
+                    data.forEach(p => {
+                        const opt = document.createElement('option');
+                        opt.value = p.id;
+                        opt.textContent = p.name;
+                        select.append(opt);
+                    });
+                });
+        }
+        document.getElementById('productSelect').onchange = () => {
+            const id = document.getElementById('productSelect').value;
+            const tbody = document.getElementById('dynamicTransactionsTable');
+            tbody.innerHTML = '';
+            if (!id) return;
+            fetch(`/api/products/${id}/transactions`)
+                .then(r => r.json())
+                .then(data => {
+                    data.forEach(x => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `<td>${x.type}</td><td>${x.quantity}</td><td>${new Date(x.timestamp).toLocaleString()}</td><td><button class="btn-primary" onclick="printTransaction('${x.id}','${x.type}',${x.quantity},'${x.timestamp}')">Print</button></td>`;
+                        tbody.append(tr);
+                    });
+                });
+        };
+        function printTransaction(id, type, quantity, ts) {
+            const w = window.open('', '_blank');
+            w.document.write(`<h2>Transaction ${id}</h2><p>Type: ${type}</p><p>Quantity: ${quantity}</p><p>Timestamp: ${new Date(ts).toLocaleString()}</p>`);
+            w.print();
+            w.close();
+        }
+        document.getElementById('printAll').onclick = () => {
+            const rows = document.querySelectorAll('#dynamicTransactionsTable tr');
+            const w = window.open('', '_blank');
+            rows.forEach(r => w.document.write(r.innerHTML + '<br>'));
+            w.print();
+            w.close();
+        };
+        loadProducts();
+        
+    </script>
+    
+</body>
+</html>
